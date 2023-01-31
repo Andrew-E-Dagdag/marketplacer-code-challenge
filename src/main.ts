@@ -10,17 +10,30 @@ console.log("");
 console.log("TOTAL: $163.65");
 
 const EXIT_CODE = 9;
+import products from "./products/products.json";
 
 const printCommands = () => {
   console.log(
-    "Commands available: Browse, View [index], Add [index], Cart, Checkout"
+    "Commands available: Browse, View [index], Add [index] [quantity], Cart, Checkout"
   );
+};
+
+const printProducts = () => {
+  if (products.length === 0) {
+    console.log("No products are currently available");
+    return;
+  }
+
+  products.forEach((product, index) => {
+    console.log(`${index + 1}. ${product.name} - $${product.price}`);
+  });
 };
 
 const main = () => {
   let command = 0;
   while (command != EXIT_CODE) {
     printCommands();
+    printProducts();
     command = EXIT_CODE;
   }
 };

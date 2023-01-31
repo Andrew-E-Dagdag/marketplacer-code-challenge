@@ -47,13 +47,21 @@ type Product = {
   uuid: number;
   name: string;
   price: string;
+  description?: string;
 };
 
 // TODO: Separate into own function file
 const viewProduct = (index: number) => {
-  const product = products[index - 1];
+  const product: Product = products[index - 1];
   printProduct(product, index);
-  console.log("Description: lorem ipsum");
+  console.log(
+    `Description: ${product.description ?? "Lorem Ipsum Very Cool Product"}`
+  );
+};
+
+//
+const addProduct = (index: number, quantity: number) => {
+  console.log({ index, quantity });
 };
 
 // TODO: Separate into own function file
@@ -102,7 +110,7 @@ const argQtyError = (properCommand: string) => {
 };
 const validNumber = (input: string, isIndex = false): boolean => {
   const num = Number(input);
-  if (isNaN(num) || (isIndex && (num <= 0 || num > products.length))) {
+  if (isNaN(num) || num <= 0 || (isIndex && num > products.length)) {
     return false;
   }
   return true;
@@ -153,6 +161,12 @@ const main = async () => {
       printProducts();
     } else if (validCommand.command === "VIEW" && validCommand.index != null) {
       viewProduct(validCommand.index);
+    } else if (
+      validCommand.command === "ADD" &&
+      validCommand.index != null &&
+      validCommand.quantity != null
+    ) {
+      addProduct(validCommand.index, validCommand.quantity);
     } else if (validCommand.command === "EXIT") {
       command = EXIT_CODE;
     }

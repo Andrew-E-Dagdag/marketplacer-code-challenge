@@ -7,7 +7,7 @@ console.log("4. Front Derailleur - 34.9mm - $31.22");
 console.log("");
 console.log("Discount applied: 20% off on total greater than $100");
 console.log("");
-console.log("TOTAL: $163.65");
+console.log("TOTAL: $163.65\n\n\n\n\n");
 
 import products from "./products/products.json";
 
@@ -15,6 +15,7 @@ import products from "./products/products.json";
 const EXIT_CODE = 9;
 // TODO: explore making these into enums and types for better checks
 const COMMANDS = ["BROWSE", "VIEW", "ADD", "CART", "CHECKOUT", "EXIT"];
+// enum TEST { BROWSE, VIEW, ADD, CART, CHECKOUT, EXIT }
 
 // TODO: Separate into own function file
 const printCommands = () => {
@@ -22,6 +23,10 @@ const printCommands = () => {
     "Commands available: Browse, View [index], Add [index] [quantity], Cart, Checkout, Exit"
   );
 };
+
+// TODO: separate utility file
+const printProduct = (product: Product, index: number) =>
+  console.log(`${index}. ${product.name} - $${product.price}`);
 
 // TODO: Separate into own function file
 const printProducts = () => {
@@ -31,8 +36,24 @@ const printProducts = () => {
   }
 
   products.forEach((product, index) => {
-    console.log(`${index + 1}. ${product.name} - $${product.price}`);
+    printProduct(product, index + 1);
   });
+
+  // Acts as a spacer, better readability
+  console.log();
+};
+
+type Product = {
+  uuid: number;
+  name: string;
+  price: string;
+};
+
+// TODO: Separate into own function file
+const viewProduct = (index: number) => {
+  const product = products[index - 1];
+  printProduct(product, index);
+  console.log("Description: lorem ipsum");
 };
 
 // TODO: Separate into own function file
@@ -55,7 +76,8 @@ const getCommand = async (): Promise<ValidCommand> => {
     command: "n/a"
   };
   while (validInputLoop) {
-    const userInput = await rl.question("\nInput: ");
+    const userInput = await rl.question("Input: ");
+    console.log();
     const inputArr = userInput.split(" ");
     const command = inputArr[0].toUpperCase();
     if (validInput(inputArr, command)) {
@@ -78,8 +100,12 @@ const getCommand = async (): Promise<ValidCommand> => {
 const argQtyError = (properCommand: string) => {
   console.log(`Incorrect number of arguments, ${properCommand}`);
 };
-const validNumber = (input: string): boolean => {
-  return !isNaN(Number(input));
+const validNumber = (input: string, isIndex = false): boolean => {
+  const num = Number(input);
+  if (isNaN(num) || (isIndex && (num <= 0 || num > products.length))) {
+    return false;
+  }
+  return true;
 };
 const validInput = (inputArr: string[], inputCommand: string): boolean => {
   if (!COMMANDS.includes(inputCommand)) {
@@ -94,7 +120,7 @@ const validInput = (inputArr: string[], inputCommand: string): boolean => {
       return false;
     }
 
-    if (isNaN(Number(inputArr[1]))) {
+    if (!validNumber(inputArr[1], true)) {
       console.log(
         "Index should be a number, e.g. for product '1. Great Product - $4.00', enter 'View 1'"
       );
@@ -108,7 +134,7 @@ const validInput = (inputArr: string[], inputCommand: string): boolean => {
       return false;
     }
 
-    if (!validNumber(inputArr[1]) || !validNumber(inputArr[2])) {
+    if (!validNumber(inputArr[1], true) || !validNumber(inputArr[2])) {
       console.log(
         "Index and Quantity should be a number, e.g. to add to cart 5 pieces of product '1. Great Product - $4.00', enter 'Add 1 5'"
       );
@@ -120,12 +146,14 @@ const validInput = (inputArr: string[], inputCommand: string): boolean => {
 
 const main = async () => {
   let command = 0;
+  printCommands();
   while (command != EXIT_CODE) {
-    printCommands();
-    // printProducts();
     const validCommand = await getCommand();
-    // console.log({ userInput });
-    if (validCommand.command === "EXIT") {
+    if (validCommand.command === "BROWSE") {
+      printProducts();
+    } else if (validCommand.command === "VIEW" && validCommand.index != null) {
+      viewProduct(validCommand.index);
+    } else if (validCommand.command === "EXIT") {
       command = EXIT_CODE;
     }
   }

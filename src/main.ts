@@ -13,6 +13,7 @@ import products from "./products/products.json";
 
 // TODO: Separate constants to own constants.ts file
 const EXIT_CODE = 9;
+// TODO: explore making these into enums and types for better checks
 const COMMANDS = ["BROWSE", "VIEW", "ADD", "CART", "CHECKOUT", "EXIT"];
 
 // TODO: Separate into own function file
@@ -37,16 +38,40 @@ const printProducts = () => {
 // TODO: Separate into own function file
 import * as readline from "node:readline/promises";
 
-const getCommand = async (): Promise<string> => {
+type ValidCommand = {
+  command: string;
+  index?: number;
+  quantity?: number;
+};
+
+const getCommand = async (): Promise<ValidCommand> => {
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
   });
 
-  const answer = await rl.question("Command: ");
+  let validInputLoop = true;
+  const validCommand: ValidCommand = {
+    command: "n/a"
+  };
+  while (validInputLoop) {
+    const userInput = await rl.question("\nInput: ");
+    const inputArr = userInput.split(" ");
+    const command = inputArr[0].toUpperCase();
+    if (validInput(inputArr, command)) {
+      validInputLoop = false;
+      validCommand.command = command;
+      if (validCommand.command === "VIEW") {
+        validCommand.index = Number(inputArr[1]);
+      } else if (validCommand.command === "ADD") {
+        validCommand.index = Number(inputArr[1]);
+        validCommand.quantity = Number(inputArr[2]);
+      }
+    }
+  }
 
   rl.close();
-  return answer;
+  return validCommand;
 };
 
 // TODO: Separate into own validation function file
@@ -56,10 +81,10 @@ const argQtyError = (properCommand: string) => {
 const validNumber = (input: string): boolean => {
   return !isNaN(Number(input));
 };
-const validateInput = (input: string): boolean => {
-  const inputArr = input.split(" ");
-  const inputCommand = inputArr[0].toUpperCase();
+const validInput = (inputArr: string[], inputCommand: string): boolean => {
   if (!COMMANDS.includes(inputCommand)) {
+    console.log("Invalid command. See list of available commands below:");
+    printCommands();
     return false;
   }
 
@@ -97,11 +122,10 @@ const main = async () => {
   let command = 0;
   while (command != EXIT_CODE) {
     printCommands();
-    printProducts();
-    const userInput = await getCommand();
-    validateInput(userInput);
+    // printProducts();
+    const validCommand = await getCommand();
     // console.log({ userInput });
-    if (userInput === "yeehaw") {
+    if (validCommand.command === "EXIT") {
       command = EXIT_CODE;
     }
   }

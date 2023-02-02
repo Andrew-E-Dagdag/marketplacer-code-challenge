@@ -52,16 +52,32 @@ type Product = {
 
 // TODO: Separate into own function file
 const viewProduct = (index: number) => {
-  const product: Product = products[index - 1];
+  const product: Product = getProductByIndex(index);
   printProduct(product, index);
   console.log(
     `Description: ${product.description ?? "Lorem Ipsum Very Cool Product"}`
   );
 };
 
-//
+// TODO: Move to helper functions
+const getProductByIndex = (index: number): Product => {
+  return products[index - 1];
+};
+
+type ShoppingCart = {
+  [uuid: string]: number;
+};
+
+const ShoppingCart: ShoppingCart = {};
+
+// TODO: Separate into own function file
 const addProduct = (index: number, quantity: number) => {
-  console.log({ index, quantity });
+  const product = getProductByIndex(index);
+  if (ShoppingCart[product.uuid] != null) {
+    ShoppingCart[product.uuid] = quantity + ShoppingCart[product.uuid];
+  } else {
+    ShoppingCart[product.uuid] = quantity;
+  }
 };
 
 // TODO: Separate into own function file
@@ -69,11 +85,12 @@ import * as readline from "node:readline/promises";
 
 type ValidCommand = {
   command: string;
-  index?: number;
+  index?: number; // Note that index starts with 1, not 0
   quantity?: number;
 };
 
 const getCommand = async (): Promise<ValidCommand> => {
+  console.log({ ShoppingCart }); // DEBUGGING
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout

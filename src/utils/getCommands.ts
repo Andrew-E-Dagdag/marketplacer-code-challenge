@@ -1,8 +1,8 @@
 import * as readline from "node:readline/promises";
 import { validInput } from "./validation/inputValidation";
-import type { ValidCommand } from "./types";
+import type { ShoppingCart, ValidCommand } from "./types";
 
-export const getCommand = async (): Promise<ValidCommand> => {
+export const getCommand = async (cart: ShoppingCart): Promise<ValidCommand> => {
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
@@ -17,7 +17,7 @@ export const getCommand = async (): Promise<ValidCommand> => {
     console.log();
     const inputArr = userInput.split(" ");
     const command = inputArr[0].toUpperCase();
-    if (validInput(inputArr, command)) {
+    if (validInput(inputArr, command, cart)) {
       validInputLoop = false;
       validCommand.command = command;
       if (validCommand.command === "VIEW") {

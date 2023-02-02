@@ -9,7 +9,7 @@ console.log("Discount applied: 20% off on total greater than $100");
 console.log("");
 console.log("TOTAL: $163.65\n\n\n\n\n");
 
-import products from "./products/products.json";
+import jsonProducts from "./products/products.json";
 
 // TODO: Separate constants to own constants.ts file
 const EXIT_CODE = 9;
@@ -30,12 +30,12 @@ const printProduct = (product: Product, index: number) =>
 
 // TODO: Separate into own function file
 const printProducts = () => {
-  if (products.length === 0) {
+  if (jsonProducts.length === 0) {
     console.log("No products are currently available");
     return;
   }
 
-  products.forEach((product, index) => {
+  jsonProducts.forEach((product, index) => {
     printProduct(product, index + 1);
   });
 
@@ -61,23 +61,68 @@ const viewProduct = (index: number) => {
 
 // TODO: Move to helper functions
 const getProductByIndex = (index: number): Product => {
-  return products[index - 1];
+  return jsonProducts[index - 1];
+};
+
+type FilteredProducts = { [uuid: string]: Product };
+const getProductsByUUID = (uuids: string[]): FilteredProducts => {
+  return jsonProducts.reduce<FilteredProducts>((acc, currentProduct) => {
+    const uuid = String(currentProduct.uuid);
+    if (uuids.includes(uuid)) {
+      acc[uuid] = currentProduct;
+    }
+    return acc;
+  }, {});
 };
 
 type ShoppingCart = {
   [uuid: string]: number;
 };
 
-const ShoppingCart: ShoppingCart = {};
+const Cart: ShoppingCart = {};
 
 // TODO: Separate into own function file
 const addProduct = (index: number, quantity: number) => {
   const product = getProductByIndex(index);
-  if (ShoppingCart[product.uuid] != null) {
-    ShoppingCart[product.uuid] = quantity + ShoppingCart[product.uuid];
+  if (Cart[product.uuid] != null) {
+    Cart[product.uuid] = quantity + Cart[product.uuid];
   } else {
-    ShoppingCart[product.uuid] = quantity;
+    Cart[product.uuid] = quantity;
   }
+};
+
+// TODO: Separate into own function file
+const viewCart = () => {
+  const uuids = Object.keys(Cart);
+  const productDetails = getProductsByUUID(uuids);
+  let cartTotal = 0;
+  uuids.forEach((uuid, index) => {
+    const product = productDetails[uuid];
+    const productTotal = Number(product.price) * Cart[uuid];
+    cartTotal += productTotal;
+    console.log(`${product.name} - $${[product.price]}/pc - ${productTotal}`);
+  });
+
+  console.log(`Your total is currently: $${applyDiscounts(cartTotal)}`);
+};
+
+const applyDiscounts = (total: number): number => {
+  let multiplier = 1;
+  if (total > 100) {
+    console.log("Discount applied: 20% off on total greater than $100");
+    multiplier = 0.8;
+  } else if (total > 50) {
+    console.log("Discount applied: 15% off on total greater than $100");
+    multiplier = 0.85;
+  } else if (total > 20) {
+    console.log("Discount applied: 10% off on total greater than $100");
+    multiplier = 0.9;
+  } else {
+    console.log(
+      "No discount applied. Add more products to your cart to avail of discounts up to 20%!"
+    );
+  }
+  return Math.round(total * multiplier * 100) / 100;
 };
 
 // TODO: Separate into own function file
@@ -90,7 +135,7 @@ type ValidCommand = {
 };
 
 const getCommand = async (): Promise<ValidCommand> => {
-  console.log({ ShoppingCart }); // DEBUGGING
+  console.log({ Cart }); // DEBUGGING
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
@@ -127,7 +172,7 @@ const argQtyError = (properCommand: string) => {
 };
 const validNumber = (input: string, isIndex = false): boolean => {
   const num = Number(input);
-  if (isNaN(num) || num <= 0 || (isIndex && num > products.length)) {
+  if (isNaN(num) || num <= 0 || (isIndex && num > jsonProducts.length)) {
     return false;
   }
   return true;
@@ -184,6 +229,8 @@ const main = async () => {
       validCommand.quantity != null
     ) {
       addProduct(validCommand.index, validCommand.quantity);
+    } else if (validCommand.command === "CART") {
+      viewCart();
     } else if (validCommand.command === "EXIT") {
       command = EXIT_CODE;
     }

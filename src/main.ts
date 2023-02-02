@@ -11,12 +11,11 @@ console.log("TOTAL: $163.65\n\n\n\n\n");
 
 import { jsonProducts } from "./constants";
 import { getCommand } from "./utils/getCommands";
-import { validInput } from "./utils/inputValidation";
+import { Product, ShoppingCart } from "./utils/types";
+import { viewCart } from "./utils/viewCart";
 
 // TODO: Separate constants to own constants.ts file
 const EXIT_CODE = 9;
-// TODO: explore making these into enums and types for better checks
-const COMMANDS = ["BROWSE", "VIEW", "ADD", "CART", "CHECKOUT", "EXIT"];
 // enum TEST { BROWSE, VIEW, ADD, CART, CHECKOUT, EXIT }
 
 // TODO: Separate into own function file
@@ -45,13 +44,6 @@ const printProducts = () => {
   console.log();
 };
 
-type Product = {
-  uuid: number;
-  name: string;
-  price: string;
-  description?: string;
-};
-
 // TODO: Separate into own function file
 const viewProduct = (index: number) => {
   const product: Product = getProductByIndex(index);
@@ -66,21 +58,6 @@ const getProductByIndex = (index: number): Product => {
   return jsonProducts[index - 1];
 };
 
-type FilteredProducts = { [uuid: string]: Product };
-const getProductsByUUID = (uuids: string[]): FilteredProducts => {
-  return jsonProducts.reduce<FilteredProducts>((acc, currentProduct) => {
-    const uuid = String(currentProduct.uuid);
-    if (uuids.includes(uuid)) {
-      acc[uuid] = currentProduct;
-    }
-    return acc;
-  }, {});
-};
-
-type ShoppingCart = {
-  [uuid: string]: number;
-};
-
 const Cart: ShoppingCart = {};
 
 // TODO: Separate into own function file
@@ -91,40 +68,6 @@ const addProduct = (index: number, quantity: number) => {
   } else {
     Cart[product.uuid] = quantity;
   }
-};
-
-// TODO: Separate into own function file
-const viewCart = () => {
-  const uuids = Object.keys(Cart);
-  const productDetails = getProductsByUUID(uuids);
-  let cartTotal = 0;
-  uuids.forEach((uuid, index) => {
-    const product = productDetails[uuid];
-    const productTotal = Number(product.price) * Cart[uuid];
-    cartTotal += productTotal;
-    console.log(`${product.name} - $${[product.price]}/pc - ${productTotal}`);
-  });
-
-  console.log(`Your total is currently: $${applyDiscounts(cartTotal)}`);
-};
-
-const applyDiscounts = (total: number): number => {
-  let multiplier = 1;
-  if (total > 100) {
-    console.log("Discount applied: 20% off on total greater than $100");
-    multiplier = 0.8;
-  } else if (total > 50) {
-    console.log("Discount applied: 15% off on total greater than $100");
-    multiplier = 0.85;
-  } else if (total > 20) {
-    console.log("Discount applied: 10% off on total greater than $100");
-    multiplier = 0.9;
-  } else {
-    console.log(
-      "No discount applied. Add more products to your cart to avail of discounts up to 20%!"
-    );
-  }
-  return Math.round(total * multiplier * 100) / 100;
 };
 
 const main = async () => {
@@ -143,7 +86,7 @@ const main = async () => {
     ) {
       addProduct(validCommand.index, validCommand.quantity);
     } else if (validCommand.command === "CART") {
-      viewCart();
+      viewCart(Cart);
     } else if (validCommand.command === "EXIT") {
       command = EXIT_CODE;
     }

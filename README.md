@@ -6,29 +6,47 @@ This is a repository to solve the [marketplacer-code-challenge](https://gist.git
 
 - Load a list of products from a file. (done)
 - List product details to the user. (done)
-- Add products to a Shopping Cart.
-- Apply promotional discounts.
-- Calculate and display the total cost.
+- Add products to a Shopping Cart. (done)
+- Apply promotional discounts. (done)
+- Calculate and display the total cost. (done)
 - (self: implement tests for all functions)
 
 ## Usage:
 
-### Loading a list of products from a file:
+### Starting the program:
 
-- Insert steps here
+- Clone the repository
+- `npm i` to install the required dependencies
+- `npm run main` to run the application
 
-### List product details to the user
+### Using the program
 
-- Insert steps here
+#### Browse
 
-### Add products to a shopping cart
+- `Browse`
+- - Shows you the list of products that have been loaded in from the json file
 
-- Insert steps here
-- Additional goal: list shopping cart items
-- Under additional goal, also display total running cost (including promotional discount factored in)
+#### View Product
 
-### Checkout
+- `View [product index]`
+- - View the specific details of a product, with the index coming from the number seen in the `Browse` command. E.g. To view `1. Jockey Wheels - Orange - $15.39`, use `View 1`
 
-- Insert steps here
-- - notes: should apply promotional discounts
-- - should calculate and display the total cost
+#### Add/Remove Product
+
+- `Add [product index] [quantity]` | `Remove [product index] [quantity]`
+- - Add or Remove the product to your shopping cart, with the index coming from the number seen in the `Browse` command and quantity being the number of items you want to add or remove. E.g. To add 5 pieces of `1. Jockey Wheels - Orange - $15.39`, use `Add 1 5`. To remove, simply use `Remove 1 3`, leaving you with 2 items in your cart.
+
+#### Cart
+
+- `Cart`
+- - Check the contents of your shopping cart, along with the total amount and any discounts automatically applied.
+
+#### Checkout
+
+- `Checkout`
+- - Checkout the cart by exiting the program and be redirected to the payment platform. For this exercise, the redirect and payment platform are not implemented. Instead, this exits the program.
+
+#### Exit
+
+- `Exit`
+- - Exits the program

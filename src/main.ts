@@ -6,14 +6,14 @@ import { ShoppingCart } from "./utils/types";
 import { viewCart } from "./utils/viewCart";
 import { viewProduct } from "./utils/viewProduct";
 
-// enum TEST { BROWSE, VIEW, ADD, CART, CHECKOUT, EXIT }
-let cart: ShoppingCart = {};
-
 const main = async () => {
   let command = 0;
+  let cart: ShoppingCart = {};
+
   printCommands();
+
   while (command != EXIT_CODE) {
-    const validCommand = await getCommand();
+    const validCommand = await getCommand(cart);
     if (validCommand.command === "BROWSE") {
       printProducts();
     } else if (validCommand.command === "VIEW" && validCommand.index != null) {
@@ -26,6 +26,11 @@ const main = async () => {
       cart = addProduct(cart, validCommand.index, validCommand.quantity);
     } else if (validCommand.command === "CART") {
       viewCart(cart);
+    } else if (validCommand.command === "CHECKOUT") {
+      console.log(
+        "Thank you for shopping with us! You will now be redirected to our payments platform!"
+      );
+      command = EXIT_CODE;
     } else if (validCommand.command === "EXIT") {
       command = EXIT_CODE;
     }

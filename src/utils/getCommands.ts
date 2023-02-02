@@ -22,7 +22,10 @@ export const getCommand = async (cart: ShoppingCart): Promise<ValidCommand> => {
       validCommand.command = command;
       if (validCommand.command === "VIEW") {
         validCommand.index = Number(inputArr[1]);
-      } else if (validCommand.command === "ADD") {
+      } else if (
+        validCommand.command === "ADD" ||
+        validCommand.command === "REMOVE"
+      ) {
         validCommand.index = Number(inputArr[1]);
         validCommand.quantity = Number(inputArr[2]);
       }

@@ -5,6 +5,7 @@ import { printProducts, printCommands } from "./utils/printing";
 import { ShoppingCart } from "./utils/types";
 import { viewCart } from "./utils/viewCart";
 import { viewProduct } from "./utils/viewProduct";
+import { removeProduct } from "./utils/removeProduct";
 
 const main = async () => {
   let command = 0;
@@ -24,6 +25,12 @@ const main = async () => {
       validCommand.quantity != null
     ) {
       cart = addProduct(cart, validCommand.index, validCommand.quantity);
+    } else if (
+      validCommand.command === "REMOVE" &&
+      validCommand.index != null &&
+      validCommand.quantity != null
+    ) {
+      cart = removeProduct(cart, validCommand.index, validCommand.quantity);
     } else if (validCommand.command === "CART") {
       viewCart(cart);
     } else if (validCommand.command === "CHECKOUT") {

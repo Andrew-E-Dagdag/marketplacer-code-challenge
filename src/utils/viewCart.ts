@@ -24,5 +24,6 @@ export const viewCart = (cart: ShoppingCart) => {
     );
   });
 
-  console.log(`TOTAL: $${applyDiscounts(cartTotal)}`);
+  const discountedTotal = applyDiscounts(cartTotal);
+  console.log(`TOTAL: $${discountedTotal}`);
 };

@@ -13,5 +13,5 @@ export const viewCart = (Cart: ShoppingCart) => {
     console.log(`${product.name} - $${[product.price]}/pc - ${productTotal}`);
   });
 
-  console.log(`Your total is currently: $${applyDiscounts(cartTotal)}`);
+  console.log(`TOTAL: $${applyDiscounts(cartTotal)}`);
 };

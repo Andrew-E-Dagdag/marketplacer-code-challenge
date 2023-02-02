@@ -1,18 +1,7 @@
-import { COMMANDS } from "../constants";
-import { printCommands } from "./printCommands";
-import { jsonProducts } from "../constants";
-
-const argQtyError = (properCommand: string) => {
-  console.log(`Incorrect number of arguments, ${properCommand}`);
-};
-
-const validNumber = (input: string, isIndex = false): boolean => {
-  const num = Number(input);
-  if (isNaN(num) || num <= 0 || (isIndex && num > jsonProducts.length)) {
-    return false;
-  }
-  return true;
-};
+import { COMMANDS, jsonProducts } from "../../constants";
+import { printCommands } from "../printing";
+import { argQtyError } from "./argQtyError";
+import { validNumber } from "./validNumber";
 
 export const validInput = (
   inputArr: string[],

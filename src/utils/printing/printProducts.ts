@@ -1,4 +1,4 @@
-import { jsonProducts } from "../constants";
+import { jsonProducts } from "../../constants";
 import { printProduct } from "./printProduct";
 
 export const printProducts = () => {
@@ -11,6 +11,5 @@ export const printProducts = () => {
     printProduct(product, index + 1);
   });
 
-  // Acts as a spacer, better readability
-  console.log();
+  console.log(); //Spacer
 };

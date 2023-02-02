@@ -1,6 +1,5 @@
-// TODO: Separate into own function file
 import * as readline from "node:readline/promises";
-import { validInput } from "./inputValidation";
+import { validInput } from "./validation/inputValidation";
 import type { ValidCommand } from "./types";
 
 export const getCommand = async (): Promise<ValidCommand> => {

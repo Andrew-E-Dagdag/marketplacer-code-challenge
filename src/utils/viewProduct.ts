@@ -1,5 +1,5 @@
 import { getProductByIndex } from "./getProductByIndex";
-import { printProduct } from "./printProduct";
+import { printProduct } from "./printing";
 import { Product } from "./types";
 
 export const viewProduct = (index: number) => {

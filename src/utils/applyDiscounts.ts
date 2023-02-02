@@ -14,5 +14,7 @@ export const applyDiscounts = (total: number): number => {
       "No discount applied. Add more products to your cart to avail of discounts up to 20%!"
     );
   }
+
+  console.log(); // Spacer
   return Math.round(total * multiplier * 100) / 100;
 };

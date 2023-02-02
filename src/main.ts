@@ -1,23 +1,13 @@
 import { EXIT_CODE } from "./constants";
 import { getCommand } from "./utils/getCommands";
-import { getProductByIndex } from "./utils/getProductByIndex";
+import { addProduct } from "./utils/addProduct";
 import { printProducts, printCommands } from "./utils/printing";
 import { ShoppingCart } from "./utils/types";
 import { viewCart } from "./utils/viewCart";
 import { viewProduct } from "./utils/viewProduct";
 
 // enum TEST { BROWSE, VIEW, ADD, CART, CHECKOUT, EXIT }
-const Cart: ShoppingCart = {};
-
-// TODO: Separate into own function file
-const addProduct = (index: number, quantity: number) => {
-  const product = getProductByIndex(index);
-  if (Cart[product.uuid] != null) {
-    Cart[product.uuid] = quantity + Cart[product.uuid];
-  } else {
-    Cart[product.uuid] = quantity;
-  }
-};
+let cart: ShoppingCart = {};
 
 const main = async () => {
   let command = 0;
@@ -33,9 +23,9 @@ const main = async () => {
       validCommand.index != null &&
       validCommand.quantity != null
     ) {
-      addProduct(validCommand.index, validCommand.quantity);
+      cart = addProduct(cart, validCommand.index, validCommand.quantity);
     } else if (validCommand.command === "CART") {
-      viewCart(Cart);
+      viewCart(cart);
     } else if (validCommand.command === "EXIT") {
       command = EXIT_CODE;
     }

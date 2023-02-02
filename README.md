@@ -19,7 +19,7 @@ This is a repository to solve the [marketplacer-code-challenge](https://gist.git
 - `npm i` to install the required dependencies
 - `npm run main` to run the application
 
-### Using the program
+### Using the program:
 
 #### Browse
 

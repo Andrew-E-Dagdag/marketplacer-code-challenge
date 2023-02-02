@@ -4,10 +4,10 @@ export const applyDiscounts = (total: number): number => {
     console.log("Discount applied: 20% off on total greater than $100");
     multiplier = 0.8;
   } else if (total > 50) {
-    console.log("Discount applied: 15% off on total greater than $100");
+    console.log("Discount applied: 15% off on total greater than $50");
     multiplier = 0.85;
   } else if (total > 20) {
-    console.log("Discount applied: 10% off on total greater than $100");
+    console.log("Discount applied: 10% off on total greater than $20");
     multiplier = 0.9;
   } else {
     console.log(

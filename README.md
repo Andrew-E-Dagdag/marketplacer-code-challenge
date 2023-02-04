@@ -9,7 +9,7 @@ This is a repository to solve the [marketplacer-code-challenge](https://gist.git
 - Add products to a Shopping Cart. (done)
 - Apply promotional discounts. (done)
 - Calculate and display the total cost. (done)
-- (self: implement tests for all functions)
+- (self: implement tests for all functions) (partially done, improvements can be made)
 
 ## Usage:
 
@@ -56,3 +56,10 @@ This is a repository to solve the [marketplacer-code-challenge](https://gist.git
 
 - `Exit`
 - - Exits the program
+
+## Points of improvement
+
+- Implement usage of enum for the commands
+- Actually cover the `getCommands` module with unit tests (it's the most difficult one for me as it requires mocking user input)
+- Explore better folder structures
+- Find a way to have the console stop repeating the user's input in the next line

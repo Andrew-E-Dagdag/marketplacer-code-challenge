@@ -1,9 +1,5 @@
-import { argQtyError } from "./argQtyError";
-import { validNumber } from "./validNumber";
 import { validInput } from "./inputValidation";
-import { getProductByIndex } from "../getProductByIndex";
-
-jest.mock("../getProductByIndex", () => ({ getProductByIndex: jest.fn() }));
+import * as getProductByIndexModule from "../getProductByIndex";
 
 describe("Validation", () => {
   beforeEach(() => {
@@ -60,7 +56,7 @@ describe("Validation", () => {
       });
 
       it("Prints invalid number error for the first number argument and returns false", () => {
-        const result = validInput(["ADD", 0, 0], "ADD", {});
+        const result = validInput(["ADD", "0", "0"], "ADD", {});
 
         expect(console.log).toHaveBeenCalledWith(
           "Index and Quantity should be a number, e.g. to add to cart 5 pieces of product '1. Great Product - $4.00', enter 'Add 1 5'"
@@ -69,7 +65,7 @@ describe("Validation", () => {
       });
 
       it("Prints invalid number error for the second number argument and returns false", () => {
-        const result = validInput(["ADD", 1, 0], "ADD", {});
+        const result = validInput(["ADD", "1", "0"], "ADD", {});
 
         expect(console.log).toHaveBeenCalledWith(
           "Index and Quantity should be a number, e.g. to add to cart 5 pieces of product '1. Great Product - $4.00', enter 'Add 1 5'"
@@ -78,7 +74,7 @@ describe("Validation", () => {
       });
 
       it("Successfully validates add command", () => {
-        const result = validInput(["ADD", 1, 1], "ADD", {});
+        const result = validInput(["ADD", "1", "1"], "ADD", {});
 
         expect(result).toBe(true);
       });
@@ -95,7 +91,7 @@ describe("Validation", () => {
       });
 
       it("Prints invalid number error for the first number argument and returns false", () => {
-        const result = validInput(["REMOVE", 0, 0], "REMOVE", {});
+        const result = validInput(["REMOVE", "0", "0"], "REMOVE", {});
 
         expect(console.log).toHaveBeenCalledWith(
           "Index and Quantity should be a number, e.g. to remove from the cart 5 pieces of product '1. Great Product - $4.00', enter 'Remove 1 5'"
@@ -104,7 +100,7 @@ describe("Validation", () => {
       });
 
       it("Prints invalid number error for the second number argument and returns false", () => {
-        const result = validInput(["REMOVE", 1, 0], "REMOVE", {});
+        const result = validInput(["REMOVE", "1", "0"], "REMOVE", {});
 
         expect(console.log).toHaveBeenCalledWith(
           "Index and Quantity should be a number, e.g. to remove from the cart 5 pieces of product '1. Great Product - $4.00', enter 'Remove 1 5'"
@@ -113,9 +109,12 @@ describe("Validation", () => {
       });
 
       it("Prints product does not exist in cart and returns false", () => {
-        getProductByIndex.mockReturnValue({ uuid: 1 });
+        jest.spyOn(getProductByIndexModule, "getProductByIndex");
+        getProductByIndexModule.getProductByIndex = jest
+          .fn()
+          .mockReturnValue({ uuid: 1 });
 
-        const result = validInput(["REMOVE", 1, 1], "REMOVE", {});
+        const result = validInput(["REMOVE", "1", "1"], "REMOVE", {});
 
         expect(console.log).toHaveBeenCalledWith(
           "Product does not exist in your cart."
@@ -124,9 +123,12 @@ describe("Validation", () => {
       });
 
       it("Successfully validates remove command", () => {
-        getProductByIndex.mockReturnValue({ uuid: 1 });
+        jest.spyOn(getProductByIndexModule, "getProductByIndex");
+        getProductByIndexModule.getProductByIndex = jest
+          .fn()
+          .mockReturnValue({ uuid: 1 });
 
-        const result = validInput(["REMOVE", 1, 1], "REMOVE", { 1: 5 });
+        const result = validInput(["REMOVE", "1", "1"], "REMOVE", { 1: 5 });
 
         expect(result).toBe(true);
       });

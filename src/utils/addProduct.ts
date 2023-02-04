@@ -7,10 +7,6 @@ export const addProduct = (
   quantity: number
 ): ShoppingCart => {
   const product = getProductByIndex(index);
-  if (cart[product.uuid] != null) {
-    cart[product.uuid] = quantity + cart[product.uuid];
-  } else {
-    cart[product.uuid] = quantity;
-  }
+  cart[product.uuid] = quantity + (cart[product.uuid] ?? 0);
   return cart;
 };

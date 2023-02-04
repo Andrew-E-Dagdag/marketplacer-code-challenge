@@ -20,7 +20,7 @@ export const viewCart = (cart: ShoppingCart) => {
     console.log(
       `${product.name} - $${[product.price]}/item - ${
         cart[uuid]
-      } items - ${productTotal}`
+      } items - $${productTotal}`
     );
   });
 

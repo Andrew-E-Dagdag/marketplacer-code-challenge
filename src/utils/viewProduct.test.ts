@@ -1,11 +1,3 @@
-// export const viewProduct = (index: number) => {
-//   const product: Product = getProductByIndex(index);
-//   printProduct(product, index);
-//   console.log(
-//     `Description: ${product.description ?? "Lorem Ipsum Very Cool Product"}`
-//   );
-// };
-
 import { viewProduct } from "./viewProduct";
 import * as getProductByIndexModule from "./getProductByIndex";
 import { Product } from "./types";

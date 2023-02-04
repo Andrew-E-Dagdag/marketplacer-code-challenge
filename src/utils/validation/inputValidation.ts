@@ -46,7 +46,7 @@ export const validInput = (
 
   if (inputCommand === "REMOVE") {
     if (inputArr.length !== 3) {
-      argQtyError("Add [index] [quantity]");
+      argQtyError("Remove [index] [quantity]");
       return false;
     }
 

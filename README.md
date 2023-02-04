@@ -13,11 +13,17 @@ This is a repository to solve the [marketplacer-code-challenge](https://gist.git
 
 ## Usage:
 
+### Running the tests:
+
+- Clone the repository
+- `npm i` to install the required dependencies
+- `npm run test` to run jest's test suite
+
 ### Starting the program:
 
 - Clone the repository
 - `npm i` to install the required dependencies
-- `npm run main` to run the application
+- `npm run start` to run the application
 
 ### Using the program:
 

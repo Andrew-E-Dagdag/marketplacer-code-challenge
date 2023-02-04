@@ -1,16 +1,3 @@
-// import { getProductByIndex } from "./getProductByIndex";
-// import { ShoppingCart } from "./types";
-
-// export const addProduct = (
-//   cart: ShoppingCart,
-//   index: number,
-//   quantity: number
-// ): ShoppingCart => {
-//   const product = getProductByIndex(index);
-//   cart[product.uuid] = quantity + (cart[product.uuid] ?? 0);
-//   return cart;
-// };
-
 import { addProduct } from "./addProduct";
 import { ShoppingCart } from "./types";
 import * as getProductByIndexModule from "./getProductByIndex";
@@ -21,7 +8,7 @@ describe("Add Product", () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    jest.clearAllMocks();
   });
 
   it("Successfully adds new products to the cart", () => {
